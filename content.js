@@ -250,6 +250,7 @@
     'scroll-behavior': 'auto',  // programmatic scrolls must land immediately
     'scroll-snap-type': 'none', // snapping would pull scrollTop off our step grid
     'overflow-anchor': 'none',  // stop the browser shifting scrollTop when content above resizes
+    'pointer-events': 'none',   // the cursor stays put while content scrolls under it; no hover styles in frames
   };
 
   // User input that would move the container while we're stepping through it.
@@ -398,6 +399,10 @@
   // The part of the element's client box (padding box, excluding borders and
   // scrollbars) that is inside the viewport, in CSS px. offsetY is how far the
   // visible top is below the client box top.
+  //
+  // Ancestors that clip overflow are intersected too: in app-style layouts the
+  // container is often a few px taller than the panel around it, and treating
+  // those hidden px as captured would drop that strip of content at every seam.
   function visibleRegion(el) {
     const rect = el.getBoundingClientRect();
     const left = rect.left + el.clientLeft;
@@ -406,10 +411,34 @@
     // clientWidth/Height of <html> exclude the page's own scrollbars.
     const viewportW = Math.min(window.innerWidth, docEl.clientWidth || window.innerWidth);
     const viewportH = Math.min(window.innerHeight, docEl.clientHeight || window.innerHeight);
-    const x0 = Math.max(left, 0);
-    const y0 = Math.max(top, 0);
-    const x1 = Math.min(left + el.clientWidth, viewportW);
-    const y1 = Math.min(top + el.clientHeight, viewportH);
+    let x0 = Math.max(left, 0);
+    let y0 = Math.max(top, 0);
+    let x1 = Math.min(left + el.clientWidth, viewportW);
+    let y1 = Math.min(top + el.clientHeight, viewportH);
+
+    for (let node = el; ;) {
+      if (getComputedStyle(node).position === 'fixed') break; // fixed boxes escape ancestor clipping
+      node = parentOf(node);
+      // <body>/<html> overflow applies to the viewport, which is already handled.
+      if (!node || node === document.body || node === docEl) break;
+      const style = getComputedStyle(node);
+      if (style.display === 'inline' || style.display === 'contents') continue;
+      const clipsX = style.overflowX !== 'visible';
+      const clipsY = style.overflowY !== 'visible';
+      if (!clipsX && !clipsY) continue;
+      const r = node.getBoundingClientRect();
+      const nodeLeft = r.left + node.clientLeft;
+      const nodeTop = r.top + node.clientTop;
+      if (clipsX) {
+        x0 = Math.max(x0, nodeLeft);
+        x1 = Math.min(x1, nodeLeft + node.clientWidth);
+      }
+      if (clipsY) {
+        y0 = Math.max(y0, nodeTop);
+        y1 = Math.min(y1, nodeTop + node.clientHeight);
+      }
+    }
+
     if (x1 - x0 < 1 || y1 - y0 < 1) return null;
     return { x: x0, y: y0, width: x1 - x0, height: y1 - y0, offsetY: y0 - top };
   }

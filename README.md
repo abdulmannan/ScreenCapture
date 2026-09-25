@@ -55,10 +55,10 @@ An element counts as scrollable when both of these are true:
 
 ## How capture works
 
-1. The extension saves the container's scroll position, the scroll positions of its ancestors, and the inline styles it is about to change. It then sets `scroll-behavior: auto`, `scroll-snap-type: none` and `overflow-anchor: none` on the container, and scrolls it into view if part of it is off screen.
+1. The extension saves the container's scroll position, the scroll positions of its ancestors, and the inline styles it is about to change. It then sets `scroll-behavior: auto`, `scroll-snap-type: none`, `overflow-anchor: none` and `pointer-events: none` on the container (the last one stops hover effects from appearing in frames), and scrolls it into view if part of it is off screen.
 2. It scrolls the container to the top, then moves down one visible height at a time. After each step it waits one animation frame plus the settle delay.
 3. Before each frame it hides `position: sticky` and `position: fixed` descendants with `visibility: hidden`, looking for new ones on every frame because virtualized lists add rows as they scroll. It also hides its own toast and waits for the change to be painted.
-4. The service worker calls `captureVisibleTab`, with at least 600 ms between calls and retries if Chrome's rate limit is hit. It crops the screenshot to the container's visible client box, multiplying CSS pixels by `devicePixelRatio`.
+4. The service worker calls `captureVisibleTab`, with at least 600 ms between calls and retries if Chrome's rate limit is hit. It crops the screenshot to the part of the container that is actually visible: inside the viewport and not hidden by a surrounding element that clips overflow. CSS pixels are multiplied by `devicePixelRatio`.
 5. Only rows that haven't been captured yet are kept. The last step usually overlaps the one before it, and only its new rows are used.
 6. The crops are stitched on an `OffscreenCanvas`, stored as PNG blobs in IndexedDB, and shown in `preview.html`.
 7. A `finally` block always puts back the scroll positions, the inline styles and sticky element visibility, including when the capture fails or is cancelled.
