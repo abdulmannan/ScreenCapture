@@ -27,7 +27,7 @@ async function init() {
   }
 
   const { parts, width, height, dpr, pageTitle, pageUrl, stamp } = capture;
-  document.title = `ScreenCapture ${stamp}`;
+  document.title = `Screen Capture ${stamp}`;
   objectUrls = parts.map((part) => URL.createObjectURL(part.blob));
 
   const sizeText = `${width} × ${height} px`;

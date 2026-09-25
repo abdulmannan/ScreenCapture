@@ -1,4 +1,4 @@
-// Content script for ScreenCapture.
+// Content script for Screen Capture.
 // Injected on demand by popup.js via chrome.scripting.executeScript. The guard
 // below makes repeated injections into the same page a no-op.
 (() => {
@@ -296,7 +296,7 @@
       ui.toast(`Captured ${frames} frame${frames === 1 ? '' : 's'}. The preview opened in a new tab.`, { timeout: 5000 });
     } catch (err) {
       const reason = err instanceof CaptureAbort ? err.message : `failed: ${err?.message || err}`;
-      console.warn('[ScreenCapture] capture stopped:', err);
+      console.warn('[Screen Capture] capture stopped:', err);
       ui.toast(`Capture stopped: ${reason}`, { timeout: 5000 });
     } finally {
       document.removeEventListener('visibilitychange', onVisibility);

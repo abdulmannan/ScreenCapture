@@ -2,7 +2,7 @@
 
 ## Store listing tab
 
-**Name:** ScreenCapture (taken from the manifest)
+**Name:** Screen Capture (taken from the manifest)
 
 **Summary** (taken from the manifest description, 132 characters max):
 Screenshot the full contents of a scrollable element (chat panes, code blocks, data grids) instead of the whole page.
@@ -16,12 +16,12 @@ Screenshot the full contents of a scrollable element (chat panes, code blocks, d
 ```
 Capture everything inside a scrollable area, not just the part you can see.
 
-Chat conversations, long code blocks, data tables, log viewers and sidebars often scroll inside the page, so normal full-page screenshots miss most of their content. ScreenCapture scrolls through the area you pick and stitches it into a single tall image.
+Chat conversations, long code blocks, data tables, log viewers and sidebars often scroll inside the page, so normal full-page screenshots miss most of their content. Screen Capture scrolls through the area you pick and stitches it into a single tall image.
 
 HOW IT WORKS
-1. Click the ScreenCapture icon, then "Pick element to capture".
+1. Click the Screen Capture icon, then "Pick element to capture".
 2. Move your mouse over the page. Scrollable areas are highlighted.
-3. Click the one you want. ScreenCapture scrolls through it and captures every part.
+3. Click the one you want. Screen Capture scrolls through it and captures every part.
 4. A preview opens in a new tab, where you can copy the image, download it, or save it wherever you like.
 
 FEATURES
@@ -32,7 +32,7 @@ FEATURES
 • Press Esc at any time to cancel
 
 PRIVACY
-Everything happens on your computer. ScreenCapture collects no data, has no tracking, and makes no network requests.
+Everything happens on your computer. Screen Capture collects no data, has no tracking, and makes no network requests.
 
 KNOWN LIMITATIONS
 • Scroll areas inside embedded frames (iframes) aren't supported.
@@ -55,7 +55,7 @@ This extension is provided "as is", without warranty of any kind. Use it at your
 **Single purpose description:**
 
 ```
-ScreenCapture takes a screenshot of the full contents of a single scrollable element on a web page that the user selects, and shows it in a preview where the user can copy or download it.
+Screen Capture takes a screenshot of the full contents of a single scrollable element on a web page that the user selects, and shows it in a preview where the user can copy or download it.
 ```
 
 **Permission justifications:**

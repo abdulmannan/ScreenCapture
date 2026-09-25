@@ -1,12 +1,12 @@
-# ScreenCapture privacy policy
+# Screen Capture privacy policy
 
 _Last updated: 25 September 2026_
 
-ScreenCapture is a browser extension that takes screenshots of a scrollable area on a web page that you choose.
+Screen Capture is a browser extension that takes screenshots of a scrollable area on a web page that you choose.
 
 ## What we collect
 
-**Nothing.** ScreenCapture doesn't collect, send, sell or share any personal data or browsing data. It has no analytics or tracking, and it makes no network requests.
+**Nothing.** Screen Capture doesn't collect, send, sell or share any personal data or browsing data. It has no analytics or tracking, and it makes no network requests.
 
 ## What stays on your computer
 
@@ -24,7 +24,7 @@ None of this data leaves your device.
 | `scripting` | Adds the element picker to the current tab when you start a capture. |
 | `downloads` | Saves the finished image when you click **Download** or **Save as**. |
 
-ScreenCapture doesn't ask for access to your browsing history, and it can't read pages you haven't started a capture on.
+Screen Capture doesn't ask for access to your browsing history, and it can't read pages you haven't started a capture on.
 
 ## Changes
 

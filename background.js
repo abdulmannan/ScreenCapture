@@ -1,4 +1,4 @@
-// Service worker for ScreenCapture.
+// Service worker for Screen Capture.
 //
 // The content script drives the capture and sends, per tab:
 //   sc:begin          { width, dpr }        start a session (width in device px)

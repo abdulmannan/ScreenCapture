@@ -1,4 +1,4 @@
-# ScreenCapture
+# Screen Capture
 
 A Chrome extension (Manifest V3) that screenshots the **full scrollable contents of a single element** on a page, such as a chat pane, a code block or a data grid, rather than the whole page.
 
@@ -102,7 +102,7 @@ A capture stops cleanly when you press Esc, the tab is hidden or loses focus, th
 
 ## Privacy
 
-ScreenCapture collects no data. See [PRIVACY.md](PRIVACY.md).
+Screen Capture collects no data. See [PRIVACY.md](PRIVACY.md).
 
 ## License and disclaimer
 

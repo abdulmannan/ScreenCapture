@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "ScreenCapture",
-  "version": "1.0.0",
+  "name": "Screen Capture",
+  "version": "1.0.1",
   "description": "Screenshot the full contents of a scrollable element (chat panes, code blocks, data grids) instead of the whole page.",
   "permissions": ["activeTab", "scripting", "downloads"],
   "icons": {
@@ -18,7 +18,7 @@
     "open_in_tab": true
   },
   "action": {
-    "default_title": "ScreenCapture",
+    "default_title": "Screen Capture",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
