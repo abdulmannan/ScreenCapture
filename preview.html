@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ScreenCapture preview</title>
+  <style>
+    :root {
+      --bg: #f3f3f5;
+      --surface: #ffffff;
+      --text: #1d1d1f;
+      --muted: #6b6b72;
+      --border: #dcdce0;
+      --accent: #d6246e;
+      --accent-hover: #b81d5e;
+      --button: #ececef;
+      --button-hover: #e0e0e4;
+      --canvas: #e4e4e8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #17171a;
+        --surface: #202024;
+        --text: #ececef;
+        --muted: #9a9aa3;
+        --border: #34343a;
+        --accent: #e8467f;
+        --accent-hover: #f0679a;
+        --button: #2c2c32;
+        --button-hover: #37373e;
+        --canvas: #111114;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 1;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+      padding: 10px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .info { flex: 1 1 260px; min-width: 0; }
+    .info h1 { margin: 0; font-size: 14px; }
+    .meta { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .meta a { color: inherit; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 6px; }
+    button {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--button);
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+    button:hover { background: var(--button-hover); }
+    button:disabled { opacity: 0.5; cursor: default; }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    button.primary:hover { background: var(--accent-hover); }
+    button.danger:hover { color: #fff; background: #c62828; border-color: #c62828; }
+
+    #status {
+      position: fixed; right: 16px; bottom: 16px;
+      padding: 8px 12px; border-radius: 6px;
+      background: rgba(20, 20, 24, 0.92); color: #fff;
+      opacity: 0; transition: opacity .2s; pointer-events: none;
+    }
+    #status.show { opacity: 1; }
+
+    main { padding: 16px; }
+    .part { margin: 0 auto 16px; width: fit-content; max-width: 100%; }
+    .part-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 6px 0; color: var(--muted);
+    }
+    .frame {
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      overflow: auto;
+      max-width: 100%;
+    }
+    .frame img { display: block; cursor: zoom-in; }
+    body.fit .frame img { max-width: 100%; height: auto; }
+    body:not(.fit) .frame img { cursor: zoom-out; }
+
+    .empty { margin: 60px auto; max-width: 420px; text-align: center; color: var(--muted); }
+  </style>
+</head>
+<body class="fit">
+  <header>
+    <div class="info">
+      <h1>ScreenCapture</h1>
+      <div class="meta" id="meta">Loading…</div>
+    </div>
+    <div class="actions">
+      <button id="copy" class="primary" disabled>Copy</button>
+      <button id="download" disabled>Download</button>
+      <button id="save-as" disabled>Save as…</button>
+      <button id="zoom" disabled>Actual size</button>
+      <button id="discard" class="danger" disabled>Discard</button>
+    </div>
+  </header>
+
+  <main id="parts"></main>
+  <div id="status" role="status"></div>
+
+  <script src="db.js"></script>
+  <script src="preview.js"></script>
+</body>
+</html>

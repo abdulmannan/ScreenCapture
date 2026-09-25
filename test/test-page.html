@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ScreenCapture test page</title>
+  <style>
+    body { font: 14px/1.5 system-ui, sans-serif; margin: 24px; display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+    h2 { font-size: 14px; margin: 0 0 6px; }
+    .pane { height: 300px; overflow-y: auto; border: 1px solid #ccc; border-radius: 6px; }
+    .chat .msg { margin: 8px; padding: 8px 10px; border-radius: 10px; background: #eef; max-width: 80%; }
+    .chat .msg:nth-child(even) { margin-left: auto; background: #efe; }
+    pre.pane { margin: 0; padding: 10px; background: #1e1e1e; color: #d4d4d4; font-size: 12px; }
+    .sticky-head { position: sticky; top: 0; background: #ffd; padding: 6px 10px; border-bottom: 1px solid #cc9; font-weight: 600; }
+    table { border-collapse: collapse; width: 100%; }
+    td { border-bottom: 1px solid #eee; padding: 4px 10px; }
+    .outer { height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 8px; }
+    .inner { height: 120px; overflow-y: auto; border: 1px dashed #999; margin: 8px 0; }
+    .hidden-overflow { height: 300px; overflow: hidden; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <section>
+    <h2>Chat pane (should highlight)</h2>
+    <div class="pane chat" id="chat"></div>
+  </section>
+
+  <section>
+    <h2>Code block (should highlight)</h2>
+    <pre class="pane" id="code"></pre>
+  </section>
+
+  <section>
+    <h2>Table with sticky header (should highlight)</h2>
+    <div class="pane" id="grid">
+      <div class="sticky-head">Sticky header: must not repeat in the capture</div>
+      <table id="rows"></table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Nested scrollers (inner wins when hovered)</h2>
+    <div class="outer" id="outer"></div>
+  </section>
+
+  <section>
+    <h2>Virtualized list, rows render 200ms after scroll (tests settle delay)</h2>
+    <div class="pane" id="virtual"><div id="virtual-spacer" style="position: relative;"></div></div>
+  </section>
+
+  <section>
+    <h2>overflow: hidden (should NOT highlight)</h2>
+    <div class="hidden-overflow" id="hidden"></div>
+  </section>
+
+  <script>
+    const chat = document.getElementById('chat');
+    for (let i = 1; i <= 60; i++) {
+      const m = document.createElement('div');
+      m.className = 'msg';
+      m.textContent = `Message ${i}: ${'lorem ipsum '.repeat(1 + (i % 5))}`;
+      chat.appendChild(m);
+    }
+
+    document.getElementById('code').textContent =
+      Array.from({ length: 150 }, (_, i) => `${String(i + 1).padStart(3)}  const value${i} = compute(${i}); // line ${i + 1}`).join('\n');
+
+    const rows = document.getElementById('rows');
+    for (let i = 1; i <= 100; i++) rows.insertAdjacentHTML('beforeend', `<tr><td>Row ${i}</td><td>${(i * 37) % 1000}</td></tr>`);
+
+    const outer = document.getElementById('outer');
+    for (let i = 1; i <= 4; i++) {
+      outer.insertAdjacentHTML('beforeend', `<p>Outer paragraph ${i}</p>`);
+      const inner = document.createElement('div');
+      inner.className = 'inner';
+      inner.innerHTML = Array.from({ length: 20 }, (_, j) => `<div>Inner ${i}.${j + 1}</div>`).join('');
+      outer.appendChild(inner);
+    }
+
+    // Minimal virtualized list: only rows near the viewport exist in the DOM, and
+    // they appear with a delay, like a lazy-rendering chat or grid.
+    const ROW_H = 28, ROW_COUNT = 400, RENDER_DELAY = 200;
+    const virtual = document.getElementById('virtual');
+    const spacer = document.getElementById('virtual-spacer');
+    spacer.style.height = `${ROW_H * ROW_COUNT}px`;
+    let renderTimer = 0;
+    function renderVirtual() {
+      const first = Math.max(0, Math.floor(virtual.scrollTop / ROW_H) - 2);
+      const last = Math.min(ROW_COUNT, Math.ceil((virtual.scrollTop + virtual.clientHeight) / ROW_H) + 2);
+      spacer.innerHTML = '';
+      for (let i = first; i < last; i++) {
+        const row = document.createElement('div');
+        row.style.cssText = `position: absolute; top: ${i * ROW_H}px; left: 0; right: 0; height: ${ROW_H}px; padding: 0 10px; box-sizing: border-box; line-height: ${ROW_H}px; border-bottom: 1px solid #eee; background: hsl(${(i * 7) % 360} 70% 95%);`;
+        row.textContent = `Virtual row ${i + 1}`;
+        spacer.appendChild(row);
+      }
+    }
+    virtual.addEventListener('scroll', () => {
+      spacer.innerHTML = '';
+      clearTimeout(renderTimer);
+      renderTimer = setTimeout(renderVirtual, RENDER_DELAY);
+    });
+    renderVirtual();
+
+    document.getElementById('hidden').innerHTML = Array.from({ length: 50 }, (_, i) => `<div>Clipped line ${i + 1}</div>`).join('');
+  </script>
+</body>
+</html>
